@@ -1,0 +1,2 @@
+#!/bin/bash
+echo -n $1 | perl -015 -l12p -e0

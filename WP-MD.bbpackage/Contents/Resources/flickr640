@@ -1,0 +1,7 @@
+#!/usr/bin/python
+
+from currentflickr import *
+from sys import stdout
+
+img = '<img class="ss" src="{0}" alt="{1}" title="{1}" />'.format(currentFlickrURL('Medium 640'), currentFlickrTitle())
+stdout.write(img)

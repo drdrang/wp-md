@@ -1,0 +1,27 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import sys
+import re
+from subprocess import *
+
+# Set the environment for calling CocoaDialog.
+dialogpath = '/Applications/CocoaDialog.app/Contents/MacOS/'
+dialogenv = {'PATH': dialogpath}
+
+# Utility function for shortening text.
+def shorten(str, n):
+  'Truncate str to no more than n chars'
+  return str if len(str) <= n else str[:n-1] + '…'
+
+# Read in the buffer and collect all the reference links.
+text = sys.stdin.read()
+refs = re.findall(r'^\[([^^\]]+)\]: +(https?://)?(.+)$', text, re.MULTILINE)
+
+# Display a dialog asking for which link to use.
+choices = [ shorten(x[2], 100) for x in refs ]
+chosen = Popen(['CocoaDialog', 'standard-dropdown', '--exit-onchange', '--title', 'Previous links', '--text', 'Choose an existing link', '--items'] + choices, stdout=PIPE, env =dialogenv).communicate()[0].split()
+
+# Print the reference for the chosen link.
+if int(chosen[0]) == 1 or int(chosen[0]) == 4:
+  sys.stdout.write(refs[int(chosen[1])][0])

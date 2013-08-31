@@ -1,0 +1,41 @@
+#!/usr/bin/python
+
+import xmlrpclib
+import sys
+from datetime import datetime
+import keyring
+
+'''
+Return a list of the most recent posts in the form
+
+ nnnn  Latest post title
+ nnnn  Second latest post title
+ nnnn  Third latest post title
+
+where the nnnn's are the post id numbers.Titles are truncated to 30
+characters. The number of titles to return is given as the argument
+to the command; 10 is the default.
+'''
+
+# The blog's XMLRPC URL and username.
+url = 'http://leancrew.com/all-this/xmlrpc.php'
+user = 'drdrang'
+
+# The number of posts to return.
+postCount = 10
+try:
+  postCount = int(sys.argv[1])
+except:
+  pass
+
+# Get the password from Keychain.
+pw = keyring.get_password(url, user)
+
+# Connect.
+blog = xmlrpclib.Server(url)
+
+# Return a list of post IDs and titles.
+posts = blog.metaWeblog.getRecentPosts(0, user, pw, postCount)
+for p in posts:
+  s = u'{1:>5}  {0:<30}'.format(p['title'][:40], p['postid'])
+  print s.encode('utf8')

@@ -1,0 +1,11 @@
+#!/usr/bin/python
+
+import sys
+import re
+
+text = sys.stdin.read()
+reflinks = re.findall(r'^\[(\d+)\]: ', text, re.MULTILINE)
+if len(reflinks) == 0:
+  print 1
+else:
+  print max(int(x) for x in reflinks) + 1

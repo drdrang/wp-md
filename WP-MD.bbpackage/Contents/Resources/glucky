@@ -1,0 +1,10 @@
+#!/usr/bin/ruby
+
+require 'net/http'
+
+word = ARGV[0]
+prefix = "http://www.google.com/search?q="
+suffix = "&btnI=I'm+Feeling+Lucky"
+goodURL = URI.escape(prefix + word + suffix)
+response = Net::HTTP.get_response(URI.parse(goodURL))
+puts response.to_hash['location']

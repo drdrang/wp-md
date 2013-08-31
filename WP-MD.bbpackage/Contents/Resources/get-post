@@ -1,0 +1,67 @@
+#!/usr/bin/python
+
+import xmlrpclib
+import sys
+from datetime import datetime
+import pytz
+import keyring
+
+'''
+Return the header and body of post specified on the command line. The
+post is identified by an ID number assigned sequentially by WordPress.
+The header consists of a series of lines like
+
+Title: Many happy returns
+Keywords: bbedit, mac, regex, text editing, unix
+Date: 2012-08-20 23:54:06
+Post: 1920
+Slug: many-happy-returns
+Link: http://www.leancrew.com/all-this/2012/08/many-happy-returns/
+Status: publish
+Comments: 0
+
+It's separated from the body of the post by one or more blank lines.
+'''
+
+# The blog's XMLRPC URL and username.
+url = 'http://leancrew.com/all-this/xmlrpc.php'
+user = 'drdrang'
+
+# Time zones. WP is trustworthy only in UTC.
+utc = pytz.utc
+myTZ = pytz.timezone('US/Central')
+
+# The header fields and their metaWeblog synonyms.
+hFields = [ 'Title', 'Keywords', 'Date', 'Post',
+            'Slug', 'Link', 'Status', 'Comments' ]
+wpFields = [ 'title', 'mt_keywords', 'date_created_gmt',  'postid',
+             'wp_slug', 'link', 'post_status', 'mt_allow_comments' ]
+h2wp = dict(zip(hFields, wpFields))
+
+# Get the post ID from the command line.
+try:
+  postID = int(sys.argv[1])
+except:
+  sys.exit()
+
+# Get the password from Keychain.
+pw = keyring.get_password(url, user)
+
+# Connect.
+blog = xmlrpclib.Server(url)
+
+# Return the post as text in header/body format for possible editing.
+post = blog.metaWeblog.getPost(postID, user, pw)
+header = ''
+for f in hFields:
+  if f == 'Date':
+    # Change the date from UTC to local and from DateTime to string.
+    dt = datetime.strptime(post[h2wp[f]].value, "%Y%m%dT%H:%M:%S")
+    dt = utc.localize(dt).astimezone(myTZ)
+    header += "%s: %s\n" % (f, dt.strftime("%Y-%m-%d %H:%M:%S"))
+  else:
+    header += "%s: %s\n" % (f, post[h2wp[f]])
+
+print header.encode('utf8')
+print
+print post['description'].encode('utf8')
