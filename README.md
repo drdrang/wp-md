@@ -30,7 +30,7 @@ Return a list of recent posts with post number and title for each.
 * Needs editing: The `url` and `user` variables must be personalized to the blog's `xmlrpc.php` URL and username.
 
 **nextreflink** (Python script)  
-Scan text for numbered Markdown reference-style links and return the next ont in the series.
+Scan text for numbered Markdown reference-style links and return the next one in the series.
 
 * Fuller description: [This blog post][1].
 * External requirement: None.
