@@ -171,7 +171,10 @@ Creates a Markdown reference style link to the "I'm Feeling Lucky" hit on the se
 These are kept in a Blogging subgroup and are tied to Markdown files.
 
 **Post header**  
-Inserts a post template with fill-in spots for the title, keywords, and body. The publication date is given an initial value of two hours from the time the clipping is inserted.
+Inserts a post template with fill-in spots for the title, keywords, and body.
+
+**Post date**  
+Inserts a header line for the publication date. This line is necessary only if you want the article to be published at a time other than when you post it. Its main purpose is to provide an easily edited value in the correct format, which is easy to forget.
 
 **Flickr original image**  
 Inserts an `<img>` link for the Original image file shown on the Flickr page in the frontmost Safari tab. Uses the `flickroriginal` helper script.
