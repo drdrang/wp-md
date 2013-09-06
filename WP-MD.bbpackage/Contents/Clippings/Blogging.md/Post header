@@ -1,5 +1,6 @@
 Title: #placeholderstart#TITLE#placeholderend#
 Keywords: #placeholderstart#KEYWORDS#placeholderend#
-Date: #SYSTEM date -v +2H +"%Y-%m-%d %H:%M:%S"#
+
+
 #placeholderstart#BODY#placeholderend#
 
